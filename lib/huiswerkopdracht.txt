@@ -1,0 +1,15 @@
+Huiswerkopdracht: kleine programmeertest:
+
+Maak een simpele notitie app in flutter met basis CRUD functionaliteit, met de volgende requirements
+
+•             Navigatie
+
+•             Statemanagement
+
+•             Async
+
+•             data persistence
+
+Je bent helemaal vrij in hoe je dit aan vliegt. Be creative!
+
+Neem de uitwerking van de opdracht mee bij het gesprek.
