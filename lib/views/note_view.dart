@@ -1,7 +1,9 @@
+import 'package:cnotes/classes/note.dart';
 import 'package:flutter/material.dart';
 
 class NoteView extends StatelessWidget {
-  const NoteView({super.key});
+  final Note note;
+  const NoteView({super.key, required this.note});
 
   @override
   Widget build(BuildContext context) {
@@ -62,16 +64,19 @@ class NoteView extends StatelessWidget {
                 ),
               ],
             ),
-            const Row(
+            Row(
               children: [
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: TextField(
-                    decoration: InputDecoration(
+                    controller: TextEditingController(
+                      text: note.title,
+                    ),
+                    decoration: const InputDecoration(
                       hintText: 'Note Title',
                       border: InputBorder.none,
                     ),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.normal,
                     ),
@@ -89,10 +94,7 @@ class NoteView extends StatelessWidget {
   Widget _buildEditableLongText() {
     return TextField(
       controller: TextEditingController(
-        text: 'This is my super delux first note in CNote. CNote stands for CBS Notes.'
-            'Lets see how good this will be. I am excited to see how this will turn out.'
-            'Additionally I used a bit of AI to generate this text.'
-            'Still most of it like this line is my own imagination.',
+        text: note.text,
       ),
       maxLines: null,
       expands: true,

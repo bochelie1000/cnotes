@@ -1,5 +1,6 @@
+import 'package:cnotes/classes/note.dart';
 import 'package:cnotes/views/main_drawer.dart';
-import 'package:cnotes/views/main_view.dart';
+import 'package:cnotes/views/notes_view.dart';
 import 'package:cnotes/views/note_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,16 +16,24 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: '/',
-      routes: {
-        // '/': (context) => const MainView(),
-        '/note_view': (context) => const NoteView(),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/note_view') {
+          final Note note = settings.arguments as Note;
+          return MaterialPageRoute(
+            builder: (context) {
+              return NoteView(note: note);
+            },
+          );
+        }
+        // Handle other routes here
+        return null;
       },
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Main App'),
         ),
         drawer: const MainDrawer(),
-        body: const MainView(),
+        body: const NotesView(),
       ),
     );
   }

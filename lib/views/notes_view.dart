@@ -3,8 +3,8 @@ import 'package:cnotes/controllers/notes_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MainView extends ConsumerWidget {
-  const MainView({super.key});
+class NotesView extends ConsumerWidget {
+  const NotesView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,7 +43,8 @@ class MainView extends ConsumerWidget {
                           child: Text(note.text), // Assuming Note has a content field
                         ),
                         onTap: () {
-                          // Handle card tap
+                          // navigate to note_view
+                          Navigator.pushNamed(context, '/note_view', arguments: note);
                         },
                       ),
                     );
@@ -61,7 +62,11 @@ class MainView extends ConsumerWidget {
                 child: const Icon(Icons.add),
                 onPressed: () {
                   // navigate to note_view
-                  Navigator.pushNamed(context, '/note_view');
+                  Navigator.pushNamed(
+                    context,
+                    '/note_view',
+                    arguments: Note(title: '', text: '', color: Colors.white, created: DateTime.now()),
+                  );
                 },
               ),
             ),

@@ -1,13 +1,15 @@
+import 'dart:ui';
+
 class Note {
   String title;
   String text;
-  String color;
+  Color color;
   DateTime created;
 
   Note({
     required this.title,
     required this.text,
-    required this.color,
+    this.color = const Color(0xFFFFFFFF),
     required this.created,
   });
 }
