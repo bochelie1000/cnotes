@@ -1,12 +1,14 @@
 import 'package:cnotes/classes/note.dart';
+import 'package:cnotes/controllers/notes_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NoteView extends StatelessWidget {
+class NoteView extends ConsumerWidget {
   final Note note;
   const NoteView({super.key, required this.note});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Material(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -22,7 +24,7 @@ class NoteView extends StatelessWidget {
                   },
                 ),
                 const SizedBox(width: 16),
-                const CircleAvatar(radius: 12, backgroundColor: Colors.orange),
+                CircleAvatar(radius: 12, backgroundColor: note.color),
                 // available colors
                 DropdownButtonHideUnderline(
                   child: DropdownButton<Color>(
@@ -58,7 +60,7 @@ class NoteView extends StatelessWidget {
                       ),
                     ],
                     onChanged: (Color? newColor) {
-                      // Handle color change
+                      ref.read(notesProvider.notifier).updateNoteColor(note.id, newColor!);
                     },
                   ),
                 ),

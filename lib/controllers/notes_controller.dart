@@ -171,6 +171,16 @@ class NotesController extends ChangeNotifier {
     }
   }
 
+  void updateNoteColor(String id, Color newColor) {
+    for (var note in notes) {
+      if (note.id == id) {
+        note.color = newColor;
+        notifyListeners(); // Notify listeners after updating the color
+        break;
+      }
+    }
+  }
+
   List<Note> getNotes() {
     return List.unmodifiable(notes);
   }
