@@ -34,9 +34,17 @@ class MainView extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     Note note = notes[index];
                     return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(note.text), // Assuming Note has a content field
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: InkWell(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(note.text), // Assuming Note has a content field
+                        ),
+                        onTap: () {
+                          // Handle card tap
+                        },
                       ),
                     );
                   },
@@ -49,7 +57,7 @@ class MainView extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 16.0, right: 16.0, bottom: 40),
               child: FloatingActionButton(
-                tooltip: 'Increment',
+                tooltip: 'Add note',
                 child: const Icon(Icons.add),
                 onPressed: () {
                   // navigate to note_view
