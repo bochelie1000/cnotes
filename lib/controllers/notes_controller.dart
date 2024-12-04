@@ -6,6 +6,8 @@ final notesProvider = ChangeNotifierProvider((ref) => NotesController());
 
 class NotesController extends ChangeNotifier {
   List<Note> notes = [];
+  bool isNotesSelected = false;
+
   NotesController() {
     addNote(Note(
       title: 'First Note',
@@ -152,8 +154,18 @@ class NotesController extends ChangeNotifier {
       created: DateTime.now(),
     ));
   }
+
   void addNote(Note note) {
     notes.add(note);
+    notifyListeners();
+  }
+
+  // delete notes
+  void deleteSelectedNotes() {
+    notes.removeWhere((note) => note.isSelected);
+
+    isNotesSelected = notes.any((note) => note.isSelected);
+
     notifyListeners();
   }
 
@@ -171,6 +183,16 @@ class NotesController extends ChangeNotifier {
     }
   }
 
+  void recolorSelectedNotes(Color color) {
+    for (var note in notes) {
+      if (note.isSelected) {
+        note.color = color;
+      }
+    }
+
+    notifyListeners();
+  }
+
   void updateNoteColor(String id, Color newColor) {
     for (var note in notes) {
       if (note.id == id) {
@@ -179,6 +201,30 @@ class NotesController extends ChangeNotifier {
         break;
       }
     }
+  }
+
+  //select note
+  void select(String id) {
+    for (var note in notes) {
+      if (note.id == id) {
+        note.isSelected = !note.isSelected;
+        break;
+      }
+    }
+
+    isNotesSelected = notes.any((note) => note.isSelected);
+
+    notifyListeners();
+  }
+
+  void unselectAll() {
+    for (var note in notes) {
+      note.isSelected = false;
+    }
+
+    isNotesSelected = false;
+
+    notifyListeners();
   }
 
   List<Note> getNotes() {

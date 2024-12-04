@@ -9,6 +9,9 @@ class NoteView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final titleController = TextEditingController(text: note.title);
+    final textController = TextEditingController(text: note.text);
+
     return Material(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -20,6 +23,16 @@ class NoteView extends ConsumerWidget {
                 IconButton(
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () {
+                    //add new note if text and title are not empty
+                    if (titleController.text.isNotEmpty || textController.text.isNotEmpty) {
+                      ref.read(notesProvider.notifier).addNote(
+                            note.copyWith(
+                              title: titleController.text,
+                              text: textController.text,
+                            ),
+                          );
+                    }
+                    //return to previous screen
                     Navigator.pop(context);
                   },
                 ),
@@ -71,9 +84,7 @@ class NoteView extends ConsumerWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: TextField(
-                    controller: TextEditingController(
-                      text: note.title,
-                    ),
+                    controller: titleController,
                     decoration: const InputDecoration(
                       hintText: 'Note Title',
                       border: InputBorder.none,
@@ -86,18 +97,16 @@ class NoteView extends ConsumerWidget {
                 ),
               ],
             ),
-            Expanded(child: _buildEditableLongText()),
+            Expanded(child: _buildEditableLongText(textController)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildEditableLongText() {
+  Widget _buildEditableLongText(TextEditingController textController) {
     return TextField(
-      controller: TextEditingController(
-        text: note.text,
-      ),
+      controller: textController,
       maxLines: null,
       expands: true,
       textAlignVertical: TextAlignVertical.top,
