@@ -23,11 +23,13 @@ class NotesView extends ConsumerWidget {
                 child: GridView.builder(
                   shrinkWrap: false,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: MediaQuery.of(context).size.width < 400
+                    crossAxisCount: MediaQuery.of(context).size.width < 500
                         ? 2
-                        : MediaQuery.of(context).size.width < 900
-                            ? 4
-                            : 6,
+                        : MediaQuery.of(context).size.width < 600
+                            ? 3
+                            : MediaQuery.of(context).size.width < 800
+                                ? 4
+                                : 6,
                     crossAxisSpacing: 0.0,
                     mainAxisSpacing: 0.0,
                   ),
