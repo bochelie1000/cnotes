@@ -2,6 +2,21 @@ import 'package:cnotes/classes/note.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+class VisibilityNotifier extends StateNotifier<List<bool>> {
+  VisibilityNotifier(int length) : super(List<bool>.filled(length, true));
+
+  void hide(int index) {
+    state = [
+      for (int i = 0; i < state.length; i++)
+        if (i == index) false else state[i],
+    ];
+  }
+}
+
+final visibilityProvider = StateNotifierProvider.family<VisibilityNotifier, List<bool>, int>((ref, length) {
+  return VisibilityNotifier(length);
+});
+
 final notesProvider = ChangeNotifierProvider((ref) => NotesController());
 
 class NotesController extends ChangeNotifier {

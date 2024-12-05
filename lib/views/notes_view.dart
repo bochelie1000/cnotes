@@ -6,9 +6,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class NotesView extends ConsumerWidget {
   const NotesView({super.key});
 
+  void deleteNoteWithAnimation(BuildContext context, WidgetRef ref, int index) {
+    ref.read(visibilityProvider(ref.watch(notesProvider).notes.length).notifier).hide(index);
+    Future.delayed(Duration(milliseconds: 500), () {
+      ref.read(notesProvider.notifier).removeNoteAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<Note> notes = ref.watch(notesProvider).notes; // Watch the provider directly
+    List<bool> isVisible = ref.watch(visibilityProvider(notes.length));
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -39,7 +47,12 @@ class NotesView extends ConsumerWidget {
                             icon: const Icon(Icons.delete),
                             onPressed: () {
                               // delete selected notes
-                              ref.read(notesProvider.notifier).deleteSelectedNotes();
+                              // ref.read(notesProvider.notifier).deleteSelectedNotes();
+                              for (int i = 0; i < notes.length; i++) {
+                                if (notes[i].isSelected) {
+                                  deleteNoteWithAnimation(context, ref, i);
+                                }
+                              }
                             },
                           ),
                           Row(
@@ -111,45 +124,50 @@ class NotesView extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     Note note = notes[index];
                     return SizedBox(
-                      child: Card(
-                        elevation: note.isSelected ? 4 : 2,
-                        color: note.color,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(
-                            color: note.isSelected ? Colors.red : Colors.transparent,
-                            width: 2,
+                      child: AnimatedRotation(
+                        turns: isVisible[index] ? 2.0 : 0.0,
+                        curve: Curves.easeInToLinear,
+                        duration: Duration(milliseconds: 200),
+                        child: Card(
+                          elevation: note.isSelected ? 4 : 2,
+                          color: note.color,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(
+                              color: note.isSelected ? Colors.red : Colors.transparent,
+                              width: 2,
+                            ),
                           ),
-                        ),
-                        child: InkWell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  note.title,
-                                  style: const TextStyle(fontWeight: FontWeight.w500),
-                                ),
-                                Text(
-                                  note.text,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ), // Assuming Note has a content field
-                          ),
-                          onTap: () {
-                            if (ref.read(notesProvider).isNotesSelected) {
+                          child: InkWell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    note.title,
+                                    style: const TextStyle(fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    note.text,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ), // Assuming Note has a content field
+                            ),
+                            onTap: () {
+                              if (ref.read(notesProvider).isNotesSelected) {
+                                ref.read(notesProvider.notifier).select(note.id);
+                              } else {
+                                Navigator.pushNamed(context, '/note_view', arguments: note);
+                              }
+                            },
+                            onLongPress: () {
+                              //mark note as selected
                               ref.read(notesProvider.notifier).select(note.id);
-                            } else {
-                              Navigator.pushNamed(context, '/note_view', arguments: note);
-                            }
-                          },
-                          onLongPress: () {
-                            //mark note as selected
-                            ref.read(notesProvider.notifier).select(note.id);
-                          },
+                            },
+                          ),
                         ),
                       ),
                     );
