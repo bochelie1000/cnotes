@@ -173,9 +173,11 @@ class NotesController extends ChangeNotifier {
   //   ));
   // }
 
-  void addNote(Note note) async {
-    notes.add(note);
-    await loadNotes();
+  addNote(Note note) async {
+    Note newNote = note.copyWith(id: DateTime.now().toString());
+    notes.removeWhere((item) => item.id == note.id);
+
+    notes.add(newNote);
     saveNotes();
     notifyListeners();
   }
@@ -186,12 +188,15 @@ class NotesController extends ChangeNotifier {
 
     isNotesSelected = notes.any((note) => note.isSelected);
 
+    saveNotes();
+
     notifyListeners();
   }
 
   void removeNoteAt(int index) {
     if (index >= 0 && index < notes.length) {
       notes.removeAt(index);
+      saveNotes();
       notifyListeners();
     }
   }
@@ -201,14 +206,30 @@ class NotesController extends ChangeNotifier {
       notes[index] = newNote;
       notifyListeners();
     }
+    saveNotes();
   }
 
-  void recolorSelectedNotes(Color color) {
+  void updateNote(Note updatedNote) async {
+    for (var note in notes) {
+      if (note.id == updatedNote.id) {
+        note.title = updatedNote.title;
+        note.text = updatedNote.text;
+        note.color = updatedNote.color;
+        saveNotes();
+        notifyListeners();
+        break;
+      }
+    }
+  }
+
+  void recolorSelectedNotes(Color color) async {
     for (var note in notes) {
       if (note.isSelected) {
         note.color = color;
       }
     }
+
+    saveNotes();
 
     notifyListeners();
   }

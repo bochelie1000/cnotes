@@ -22,7 +22,7 @@ class NoteView extends ConsumerWidget {
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_back),
-                  onPressed: () {
+                  onPressed: () async {
                     //add new note if text and title are not empty
                     if (titleController.text.isNotEmpty || textController.text.isNotEmpty) {
                       ref.read(notesProvider.notifier).addNote(
