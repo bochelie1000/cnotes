@@ -174,10 +174,14 @@ class NotesController extends ChangeNotifier {
   // }
 
   addNote(Note note) async {
-    Note newNote = note.copyWith(id: DateTime.now().toString());
-    notes.removeWhere((item) => item.id == note.id);
+    //if note already exists, update it
+    if (notes.any((element) => element.id == note.id)) {
+      _updateNoteAt(notes.indexWhere((element) => element.id == note.id), note);
+      return;
+    } else {
+      notes.add(note.copyWith(id: DateTime.now().toString()));
+    }
 
-    notes.add(newNote);
     await saveNotes();
 
     notifyListeners();
@@ -202,13 +206,12 @@ class NotesController extends ChangeNotifier {
     }
   }
 
-  // void updateNoteAt(int index, Note newNote) {
-  //   if (index >= 0 && index < notes.length) {
-  //     notes[index] = newNote;
-  //     notifyListeners();
-  //   }
-  //   saveNotes();
-  // }
+  void _updateNoteAt(int index, Note newNote) {
+    if (index >= 0 && index < notes.length) {
+      notes[index] = newNote.copyWith();
+      notifyListeners();
+    }
+  }
 
   void updateNote(Note updatedNote) async {
     for (var note in notes) {
