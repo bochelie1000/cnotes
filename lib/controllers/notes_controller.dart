@@ -178,7 +178,8 @@ class NotesController extends ChangeNotifier {
     notes.removeWhere((item) => item.id == note.id);
 
     notes.add(newNote);
-    saveNotes();
+    await saveNotes();
+
     notifyListeners();
   }
 
