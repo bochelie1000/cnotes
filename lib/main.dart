@@ -33,12 +33,7 @@ class _MainAppState extends State<MainApp> {
     return Consumer(
       builder: (context, ref, child) {
         if (isloaded == false) {
-          ref.read(notesProvider.notifier).addNote(Note(
-                title: 'First Note',
-                text: 'This is the first note',
-                color: Colors.white,
-                created: DateTime.now(),
-              ));
+          ref.read(notesProvider.notifier).loadNotes();
           isloaded = true;
         }
         return MaterialApp(

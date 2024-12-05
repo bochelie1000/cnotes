@@ -184,31 +184,31 @@ class NotesController extends ChangeNotifier {
   }
 
   // delete notes
-  void deleteSelectedNotes() {
+  void deleteSelectedNotes() async {
     notes.removeWhere((note) => note.isSelected);
 
     isNotesSelected = notes.any((note) => note.isSelected);
 
-    saveNotes();
+    await saveNotes();
 
     notifyListeners();
   }
 
-  void removeNoteAt(int index) {
+  void removeNoteAt(int index) async {
     if (index >= 0 && index < notes.length) {
       notes.removeAt(index);
-      saveNotes();
+      await saveNotes();
       notifyListeners();
     }
   }
 
-  void updateNoteAt(int index, Note newNote) {
-    if (index >= 0 && index < notes.length) {
-      notes[index] = newNote;
-      notifyListeners();
-    }
-    saveNotes();
-  }
+  // void updateNoteAt(int index, Note newNote) {
+  //   if (index >= 0 && index < notes.length) {
+  //     notes[index] = newNote;
+  //     notifyListeners();
+  //   }
+  //   saveNotes();
+  // }
 
   void updateNote(Note updatedNote) async {
     for (var note in notes) {
@@ -216,7 +216,7 @@ class NotesController extends ChangeNotifier {
         note.title = updatedNote.title;
         note.text = updatedNote.text;
         note.color = updatedNote.color;
-        saveNotes();
+        await saveNotes();
         notifyListeners();
         break;
       }
@@ -230,7 +230,7 @@ class NotesController extends ChangeNotifier {
       }
     }
 
-    saveNotes();
+    await saveNotes();
 
     notifyListeners();
   }
@@ -239,7 +239,7 @@ class NotesController extends ChangeNotifier {
     for (var note in notes) {
       if (note.id == id) {
         note.color = newColor;
-        saveNotes();
+        await saveNotes();
         notifyListeners(); // Notify listeners after updating the color
         break;
       }
@@ -279,7 +279,7 @@ class NotesController extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final String? notesJson = prefs.getString('notes');
     if (notesJson != null) {
-      final List<dynamic> notesList = jsonDecode(notesJson);
+      final List<dynamic> notesList = await jsonDecode(notesJson);
       notes = notesList.map((noteJson) => Note.fromJson(noteJson)).toList();
       notifyListeners();
     }
