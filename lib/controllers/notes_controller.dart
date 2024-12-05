@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cnotes/classes/note.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class VisibilityNotifier extends StateNotifier<List<bool>> {
   VisibilityNotifier(int length) : super(List<bool>.filled(length, true));
@@ -23,155 +26,157 @@ class NotesController extends ChangeNotifier {
   List<Note> notes = [];
   bool isNotesSelected = false;
 
-  NotesController() {
-    addNote(Note(
-      title: 'First Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'Second Nosdte',
-      text: 'This is thse second note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'Thirdy third',
-      text: 'Super third',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'Forth nota',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'First Nosdte',
-      text: 'This is thse first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'Firstsd Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'First Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'First Nosdte',
-      text: 'This is thse first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'Firstsd Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'First Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'First Nosdte',
-      text: 'This is thse first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'Firstsd Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'First Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'First Nosdte',
-      text: 'This is thse first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'Firstsd Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'First Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'First Nosdte',
-      text: 'This is thse first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'Firstsd Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'First Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'First Nosdte',
-      text: 'This is thse first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'Firstsd Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'First Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'First Nosdte',
-      text: 'This is thse first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-    addNote(Note(
-      title: 'Firstsd Note',
-      text: 'This is the first note',
-      color: Colors.white,
-      created: DateTime.now(),
-    ));
-  }
+  // NotesController() {
+  //   addNote(Note(
+  //     title: 'First Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'Second Nosdte',
+  //     text: 'This is thse second note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'Thirdy third',
+  //     text: 'Super third',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'Forth nota',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'First Nosdte',
+  //     text: 'This is thse first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'Firstsd Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'First Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'First Nosdte',
+  //     text: 'This is thse first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'Firstsd Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'First Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'First Nosdte',
+  //     text: 'This is thse first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'Firstsd Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'First Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'First Nosdte',
+  //     text: 'This is thse first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'Firstsd Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'First Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'First Nosdte',
+  //     text: 'This is thse first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'Firstsd Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'First Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'First Nosdte',
+  //     text: 'This is thse first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'Firstsd Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'First Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'First Nosdte',
+  //     text: 'This is thse first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  //   addNote(Note(
+  //     title: 'Firstsd Note',
+  //     text: 'This is the first note',
+  //     color: Colors.white,
+  //     created: DateTime.now(),
+  //   ));
+  // }
 
-  void addNote(Note note) {
+  void addNote(Note note) async {
     notes.add(note);
+    await loadNotes();
+    saveNotes();
     notifyListeners();
   }
 
@@ -208,10 +213,11 @@ class NotesController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateNoteColor(String id, Color newColor) {
+  void updateNoteColor(String id, Color newColor) async {
     for (var note in notes) {
       if (note.id == id) {
         note.color = newColor;
+        saveNotes();
         notifyListeners(); // Notify listeners after updating the color
         break;
       }
@@ -245,4 +251,25 @@ class NotesController extends ChangeNotifier {
   List<Note> getNotes() {
     return List.unmodifiable(notes);
   }
+
+  // Load notes from local storage
+  Future<void> loadNotes() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? notesJson = prefs.getString('notes');
+    if (notesJson != null) {
+      final List<dynamic> notesList = jsonDecode(notesJson);
+      notes = notesList.map((noteJson) => Note.fromJson(noteJson)).toList();
+      notifyListeners();
+    }
+  }
+
+  // Save notes to local storage
+  Future<void> saveNotes() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String notesJson = jsonEncode(notes.map((note) => note.toJson()).toList());
+    await prefs.setString('notes', notesJson);
+  }
+
+  // Save note by ID
+  Future<void> saveNoteById(String id, Note updatedNote) async {}
 }

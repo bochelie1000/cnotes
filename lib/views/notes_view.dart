@@ -8,7 +8,7 @@ class NotesView extends ConsumerWidget {
 
   void deleteNoteWithAnimation(BuildContext context, WidgetRef ref, int index) {
     ref.read(visibilityProvider(ref.watch(notesProvider).notes.length).notifier).hide(index);
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       ref.read(notesProvider.notifier).removeNoteAt(index);
     });
   }
@@ -127,7 +127,7 @@ class NotesView extends ConsumerWidget {
                       child: AnimatedRotation(
                         turns: isVisible[index] ? 2.0 : 0.0,
                         curve: Curves.easeInToLinear,
-                        duration: Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 200),
                         child: Card(
                           elevation: note.isSelected ? 4 : 2,
                           color: note.color,

@@ -36,4 +36,28 @@ class Note {
       isSelected: isSelected ?? this.isSelected,
     );
   }
+
+  // to json
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'text': text,
+      'color': color.value,
+      'created': created.toIso8601String(),
+      'isSelected': isSelected,
+    };
+  }
+
+  // from json
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
+      id: json['id'],
+      title: json['title'],
+      text: json['text'],
+      color: Color(json['color']),
+      created: DateTime.parse(json['created']),
+      isSelected: json['isSelected'],
+    );
+  }
 }
